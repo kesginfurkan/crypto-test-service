@@ -32,6 +32,10 @@ export class WalletAggregate {
         });
     }
 
+    static rehydrate(props:WalletAggregateProps): WalletAggregate {
+        return new WalletAggregate(props);
+    }
+
     deactivate(): void {
         this.props.isActive = false;
         this.props.updatedAt = new Date();
