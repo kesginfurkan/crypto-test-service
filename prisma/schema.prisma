@@ -5,3 +5,72 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum BlockchainNetwork {
+  ETHEREUM_SEPOLIA
+}
+
+enum TransactionType {
+  WITHDRAW
+  DEPOSIT
+}
+
+enum TransactionStatus {
+  CREATED
+  PENDING
+  BROADCASTED
+  CONFIRMED
+  FAILED
+}
+
+model Wallet {
+  id String @id @db.Uuid
+  userId String @map("user_id")
+  address String
+  network BlockchainNetwork
+  isActive Boolean @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, network])
+  @@unique([address, network])
+  @@index([userId])
+  @@map("wallets")
+}
+
+model WhitelistAddress {
+  id String @id @db.Uuid
+  userId String @map("user_id")
+  label String
+  address String
+  network BlockchainNetwork
+  isActive Boolean @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map("updated_at")
+
+  @@unique([userId, address, network])
+  @@index([userId])
+  @@index([address])
+  @@map("whitelist_addresses")
+}
+
+model Transaction {
+  id String @id @db.Uuid
+  userId String @map("user_id")
+  type TransactionType
+  status TransactionStatus
+  fromAddress String @map("from_address")
+  toAddress String @map("to_address")
+  amount Decimal @db.Decimal(36,18)
+  network BlockchainNetwork
+  txHash String? @map("tx_hash")
+  failureReason String? @map("failure_reason")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([txHash])
+  @@index([type])
+  @@index([status])
+  @@map("transactions")
+}
