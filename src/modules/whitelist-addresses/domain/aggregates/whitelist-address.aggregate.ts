@@ -34,6 +34,10 @@ export class WhitelistAddressAggregate {
         });
     }
 
+    static rehydrate(props:WhitelistAddressAggregateProps): WhitelistAddressAggregate {
+        return new WhitelistAddressAggregate(props);
+    }
+
     deactivate(): void {
         this.props.isActive = false;
         this.props.updatedAt = new Date();

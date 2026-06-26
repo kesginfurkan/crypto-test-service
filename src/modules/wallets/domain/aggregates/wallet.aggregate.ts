@@ -13,7 +13,7 @@ export type WalletAggregateProps = {
 };
 
 export class WalletAggregate {
-    private constructor(private readonly props: WalletAggregateProps) { }
+    private constructor(private readonly props: WalletAggregateProps) {}
 
     static create(props: {
         id: string;
