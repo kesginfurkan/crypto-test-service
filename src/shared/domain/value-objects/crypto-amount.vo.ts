@@ -1,8 +1,15 @@
 import {Decimal} from 'decimal.js';
+import {ValueObject} from '../core/value-object';
 import {BusinessRuleException} from '../errors/business-rule.exception';
 
-export class CryptoAmount {
-    private constructor(private readonly value:Decimal){}
+type CryptoAmountProps = {
+    value:Decimal;
+}
+
+export class CryptoAmount extends ValueObject<CryptoAmountProps> {
+    private constructor(props: CryptoAmountProps){
+        super(props);
+    }
 
     static create(value:string): CryptoAmount {
         const amount = new Decimal(value);
@@ -11,14 +18,16 @@ export class CryptoAmount {
             throw new BusinessRuleException('Crypto amount must be greater than zero');
         }
 
-        return new CryptoAmount(amount);
+        return new CryptoAmount({
+            value: amount
+        });
     }
 
     getValue(): string {
-        return this.value.toString();
+        return this.props.value.toString();
     }
 
     isGreaterThan(amount: CryptoAmount): boolean {
-        return this.value.gt(amount.value);
+        return this.props.value.gt(amount.props.value);
     }
 }
