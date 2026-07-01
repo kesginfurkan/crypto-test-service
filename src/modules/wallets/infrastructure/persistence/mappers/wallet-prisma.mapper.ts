@@ -8,7 +8,6 @@ import {EthereumAddress} from '../../../../../shared/domain/value-objects/ethere
 export class WalletPrismaMapper {
     static toDomain(record:Wallet):WalletAggregate {
         const props:WalletAggregateProps = {
-            id:record.id,
             userId:record.userId,
             address:EthereumAddress.create(record.address),
             network: record.network as BlockchainNetwork,
@@ -17,7 +16,7 @@ export class WalletPrismaMapper {
             updatedAt: record.updatedAt
         };
 
-        return WalletAggregate.rehydrate(props);
+        return WalletAggregate.rehydrate(props, record.id);
     } 
 
     static toPersistence(wallet:WalletAggregate) {
