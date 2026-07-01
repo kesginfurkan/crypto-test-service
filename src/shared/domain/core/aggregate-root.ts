@@ -1,4 +1,5 @@
 import {DomainEvent} from './domain-event';
+import {DomainEvents} from './domain-events';
 import {Entity} from './entity';
 
 export abstract class AggregateRoot<TProps> extends Entity<TProps> {
@@ -6,6 +7,7 @@ export abstract class AggregateRoot<TProps> extends Entity<TProps> {
 
     protected addDomainEvent(domainEvent:DomainEvent):void {
         this.domainEvents.push(domainEvent);
+        DomainEvents.markAggregateForDispatch(this);
     }
 
     pullDomainEvents():DomainEvent[] {
